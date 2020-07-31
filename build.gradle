@@ -1,0 +1,62 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:1.6.1")
+        classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5-rc1')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.asciidoctor.convert'
+apply plugin: "org.sonarqube"
+apply plugin: "jacoco"
+
+group = 'com.phudnguyen.bot'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.cloud:spring-cloud-starter-openfeign:2.1.5.RELEASE')
+    compile group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    implementation('com.google.code.gson:gson:2.8.5')
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.7'
+// https://mvnrepository.com/artifact/org.simpleframework/simple-xml
+    compile group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
+// https://mvnrepository.com/artifact/org.apache.commons/commons-imaging
+    compile group: 'org.apache.commons', name: 'commons-imaging', version: '1.0-alpha1'
+
+}
+
+test {
+    useJUnitPlatform()
+}
